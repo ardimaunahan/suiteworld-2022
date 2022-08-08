@@ -1,0 +1,15 @@
+{
+  "name": "suiteworld-2022",
+  "version": "1.0.0",
+  "description": "",
+  "main": "suitecloud.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "prettier": "2.2.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
