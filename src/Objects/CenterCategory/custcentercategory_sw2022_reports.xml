@@ -1,0 +1,13 @@
+<centercategory scriptid="custcentercategory_sw2022_reports">
+  <center>BASIC</center>
+  <centertab>[scriptid=custcentertab_sw2022_tab]</centertab>
+  <label>Reports</label>
+  <links>
+    <link>
+      <linklabel></linklabel>
+      <linkobject>[scriptid=customrecord_sw2022_contract_tranlines]</linkobject>
+      <linktasktype>LIST</linktasktype>
+      <shortlist>F</shortlist>
+    </link>
+  </links>
+</centercategory>
