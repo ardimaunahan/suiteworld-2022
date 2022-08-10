@@ -17,8 +17,7 @@ WITH previoustransactions AS (
             FROM
                 customrecord_sw2022_contract_tranlines pctl
             WHERE
-                pctl.custrecord_sw2022_ctl_tranid < ctl.custrecord_sw2022_ctl_tranid
-                AND pctl.custrecord_sw2022_ctl_customer = ctl.custrecord_sw2022_ctl_customer
+                pctl.custrecord_sw2022_ctl_customer = ctl.custrecord_sw2022_ctl_customer
                 AND pctl.custrecord_sw2022_ctl_itemid = ctl.custrecord_sw2022_ctl_itemid
                 AND pctl.custrecord_sw2022_ctl_enddate < ctl.custrecord_sw2022_ctl_startdate
         ) AS previousenddate
