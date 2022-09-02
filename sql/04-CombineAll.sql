@@ -193,6 +193,11 @@ expandedcontracttranlines AS (
     FROM
         customrecord_sw2022_contract_tranlines
         JOIN maxtermperiods ON period <= CEIL(custrecord_sw2022_ctl_term)
+/*
+    WHERE
+        ADD_MONTHS(custrecord_sw2022_ctl_startdate, period - 1) BETWEEN TO_DATE('01/01/2022', 'MM/DD/YYYY')
+        AND TO_DATE('12/31/2022', 'MM/DD/YYYY')
+*/
 ),
 /*
  This table contains the Churns, which are rows that has no succeeding or next consecutive transaction.
@@ -206,6 +211,7 @@ churns AS (
         ar.enddate + 1 AS enddate,
         'Churn' AS ordertype,
         macp.periodname AS postingperiod,
+        macp.periodid AS postingperiodid,
         ROUND(
             ctl.custrecord_sw2022_ctl_totalamount / ctl.custrecord_sw2022_ctl_term,
             2
@@ -233,6 +239,7 @@ combinednewrenewalchurns AS (
         ordertype,
         previoustranid,
         NULL AS postingperiod,
+        NULL AS postingperiodid,
         0 AS computed
     FROM
         adjustedrenewals
@@ -246,6 +253,7 @@ combinednewrenewalchurns AS (
         ordertype,
         previoustranid,
         postingperiod,
+        postingperiodid,
         computed
     FROM
         churns
@@ -256,7 +264,10 @@ combinednewrenewalchurns AS (
 SELECT
     cnrc.tranid,
     tran.trandisplayname AS "transaction",
-    customer.firstname || ' ' || customer.lastname AS customer,
+    CASE
+        WHEN customer.isperson = 'F' THEN customer.companyname
+        ELSE customer.firstname || ' ' || customer.lastname
+    END AS customer,
     BUILTIN.DF(item.id) AS item,
     cnrc.ordertype,
     cnrc.previoustranid,
@@ -285,6 +296,16 @@ FROM
         ADD_MONTHS(cnrc.startdate, ectl.period - 1) BETWEEN macp.startdate AND macp.enddate
     )
     LEFT JOIN customer ON cnrc.customerid = customer.id
+/* Uncomment these lines to filter by period and Churn type
+WHERE
+    cnrc.postingperiodid = 156
+    AND cnrc.ordertype = 'Churn'
+*/
+/* Uncomment these lines to filter by period and New or Renewal type
+WHERE
+    macp.periodid = 156
+    AND cnrc.ordertype = 'New'
+*/
 ORDER BY
     cnrc.itemid,
     cnrc.startdate,

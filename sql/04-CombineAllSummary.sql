@@ -193,6 +193,11 @@ expandedcontracttranlines AS (
     FROM
         customrecord_sw2022_contract_tranlines
         JOIN maxtermperiods ON period <= CEIL(custrecord_sw2022_ctl_term)
+/*
+    WHERE
+        ADD_MONTHS(custrecord_sw2022_ctl_startdate, period - 1) BETWEEN TO_DATE('01/01/2022', 'MM/DD/YYYY')
+        AND TO_DATE('12/31/2022', 'MM/DD/YYYY')
+*/
 ),
 /*
  This table contains the Churns, which are rows that has no succeeding or next consecutive transaction.
@@ -311,5 +316,11 @@ SELECT
 FROM
     reportsummary rs
     JOIN monthlyaccountingperiods macp ON rs.postingperiodid = macp.periodid
+/*
+WHERE
+    macp.startdate BETWEEN TO_DATE('01/01/2022', 'MM/DD/YYYY')
+    AND TO_DATE('12/31/2022', 'MM/DD/YYYY')
+*/
 ORDER BY
-    rs.postingperiodid
+    macp.startdate,
+    ordertype
